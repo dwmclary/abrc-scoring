@@ -1,0 +1,12 @@
+<%= javascript_include_tag "protovis-d3.2.js"%>
+<%= javascript_include_tag :defaults %>
+<%= csrf_meta_tag %>
+<div style="float:left;width=100px;padding-top:100px">
+<p><%= link_to "Shooter Home", :controller => "shooter", :action => "show", :id => @round.shooter_id%></p>
+<p><%= link_to "End Performance", :controller => "round", :action => "show_ends", :id => @round.id%></p>
+<p><%= link_to "Arrow Distribution", :controller => "round", :action => "show_dist", :id => @round.id %></p>
+<p><%= link_to "Shot-by-Shot Performance", :controller => "round", :action => "show_shots", :id => @round.id%></p>
+<p><%= link_to "Score Sheet", :controller => "round", :action => "show_score", :id => @round.id%>
+</div>
+<h2 style="float:left;padding-left:100px"> Shot Breakdown </h2>
+<%= render "shot_histogram"%>

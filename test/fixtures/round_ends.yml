@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  arrow_count: 1
+  scores: MyString
+
+two:
+  arrow_count: 1
+  scores: MyString

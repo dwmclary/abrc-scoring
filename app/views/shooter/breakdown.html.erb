@@ -1,0 +1,5 @@
+<%= javascript_include_tag "protovis-d3.2.js"%>
+<%= javascript_include_tag :defaults %>
+<%= csrf_meta_tag %>
+<%= link_to @shooter.name + " Home", :controller => "shooter", :action => "show", :id => @shooter.id%>
+<%= render("shot_histogram")%>

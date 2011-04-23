@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  total_score: 1
+  total_bullseye: 1
+  arrow_count: 1
+  shot_at: 2011-04-17
+
+two:
+  total_score: 1
+  total_bullseye: 1
+  arrow_count: 1
+  shot_at: 2011-04-17

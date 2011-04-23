@@ -1,0 +1,16 @@
+<%= form_for @league, :url => {:controller => "league", :action => "create"} do |f| %> 
+    <fieldset>
+        <legend>League Information</legend>
+        <div> 
+            <label for="name">League Name:</label>
+            <%= f.text_field :name %>
+        </div>
+        <div> 
+            <label for="password">Distance:</label> 
+            <%= f.text_field :distance %>
+        </div>
+        <div>
+            <%= f.submit "Create League"%>
+        </div>
+    </fieldset>
+<%end%>

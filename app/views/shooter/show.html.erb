@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+function BUDEffect(element){
+    new Effect.toggle(element,'Blind', {duration:0.5});
+}
+</script>
+<div style="float:left;padding:20px">
+    <h2><%=@shooter.name%></h2>
+    <p><%= link_to "Personal Summary", :action => "results", :id => @shooter.id%></p>
+    <p><%= link_to "Logout", :controller => "sessions", :action => "destroy"%></p>
+</div>
+<div style="float:left;padding:20px">
+    <p><b>Best Score </b> <b style="font-size:24px;color:#1E72AC"> <%=@shooter.best_score%></b></p>
+    <p><b>Average Score </b> <b style="font-size:24px;color:#1E72AC"> <%='%.1f' % @shooter.average_score%></b></p>
+</div>
+
+<div style="float:left;padding-top:20px">
+<p><%= link_to "New Round", :controller => "round", :action => "new"%></p>
+<p><%= link_to "Join League" %></p>
+<p><%=link_to_function "Previous Rounds", 'BUDEffect($(previous_rounds));'%></p>
+</div>
+<div style="float:left;width:500px;display:none" id="previous_rounds">
+    <% for r in @old_rounds %>
+        <%= link_to r["date"], :controller => "round", :action => "results", :id => r["id"]%>
+    <% end %>
+</div>

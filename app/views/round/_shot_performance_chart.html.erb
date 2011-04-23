@@ -1,0 +1,66 @@
+<div align="center" style="float:left">
+    <h2> Shot Performance </h2>
+
+<div id="arrow_bar_chart" style="width:550px;float:left"></div>
+<div style="float:left;width:100px">
+    <p><b>Total Score </b> <b style="font-size:24px;color:#1E72AC"> <%=@total_scores.sum%></b></p>
+    <p><b>Avg. End Score </b> <b style="font-size:24px;color:#1E72AC"> <%=@round.average_end_score%></b></p>
+    <p><b>Avg. Best Arrow </b> <b style="font-size:24px;color:#1E72AC"> <%=@round.average_best_arrow%></b></p>
+    <p><b>Avg. Worst Arrow</b> <b style="font-size:24px;color:#1E72AC"> <%=@round.average_worst_arrow%></b></p>
+</div>
+</div>
+
+
+<script type="text/javascript+protovis">
+    var data = [];
+    <% for e in @end_scores %>
+    data.push(<%=array_or_string_for_javascript e%>.map(parseFloat));
+    <% end %>
+/* Sizing and scales. */
+    var w = 500,
+        h = 300,
+        x = pv.Scale.ordinal(pv.range(10)).splitBanded(0, w, 4/5),
+        y = pv.Scale.linear(0, 10).range(0, h);
+    
+        /* The root panel. */
+        var vis = new pv.Panel().canvas('arrow_bar_chart')
+            .width(w)
+            .height(h)
+            .bottom(20)
+            .left(30)
+            .right(10)
+            .top(5);
+            var bar = vis.add(pv.Panel)
+                .data(data)
+              .add(pv.Bar)
+                .data(function(a) a)
+                .left(function() x(this.index))
+                .width(30)
+                .bottom(0+pv.Layout.Stack())
+                .height(y);
+
+
+            bar.anchor("top").add(pv.Label)
+                .visible(function(d) d > .2)
+                .textStyle("white")
+                .text(function(d) d.toFixed(1));
+
+            bar.anchor("bottom").add(pv.Label)
+                .visible(function() !this.parent.index)
+                .textMargin(5)
+                .textBaseline("top")
+                .text(function() <%=array_or_string_for_javascript(Array.new(10){|i|1+i})%>[this.index]);
+
+            vis.add(pv.Rule)
+                .data(y.ticks())
+                .bottom(function(d) Math.round(y(d)) - .5)
+                .strokeStyle(function(d) d ? "rgba(255,255,255,.3)" : "#000")
+              .add(pv.Rule)
+                .left(0)
+                .width(5)
+                .strokeStyle("#000")
+              .anchor("left").add(pv.Label)
+                .text(function(d) d.toFixed(1));
+
+            vis.render();
+</script>
