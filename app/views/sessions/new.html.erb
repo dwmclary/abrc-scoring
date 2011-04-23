@@ -1,3 +1,4 @@
+<h1>ABR-C Scoring System</h1>
 <% if flash[:alert] %>
     <p id="notice">
         <%= flash[:alert] %></p> 
@@ -18,3 +19,4 @@
         </div>
     </fieldset>
 <%end%>
+<%= link_to "Create a new account", :controller => "shooter", :action=> "new"%>
