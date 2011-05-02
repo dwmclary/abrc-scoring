@@ -17,7 +17,7 @@ class RoundController < ApplicationController
       @type_select.push([t.name,"tournament:"+t.id.to_s])
     }
     @round = Round.new
-    @possible_scores = Array.new(@round.arrow_score) {|i| i}
+    @possible_scores = Array.new(@round.arrow_score+1) {|i| i}
     
     respond_to do |format|
       format.html 
@@ -52,7 +52,7 @@ class RoundController < ApplicationController
     @round = Round.find(params["id"])
     
     @round_end = RoundEnd.new
-    @possible_scores = Array.new(@round.arrow_score) {|i| i}
+    @possible_scores = Array.new(@round.arrow_score+1) {|i| i}
     if params["last_score"]
       @last_score = params["last_score"].to_i
     else
@@ -130,7 +130,7 @@ class RoundController < ApplicationController
     type_id = params["round_type"].split(":").last.to_i
 
     @round_end = RoundEnd.new
-    @possible_scores = Array.new(@round.arrow_score) {|i| i}
+    @possible_scores = Array.new(@round.arrow_score+1) {|i| i}
     @new_round = Round.create :shooter_id => session[:shooter_id], :shot_at => Date.today, :total_score => 0, :total_bullseye => 0, :end_count => params["round"]["end_count"], :arrow_count => params["round"]["arrow_count"]
     if round_type == "league"
       @new_round.league_id = type_id
