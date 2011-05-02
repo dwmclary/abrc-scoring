@@ -20,7 +20,8 @@ class ShooterController < ApplicationController
   
   def new
     @shooter = Shooter.new
-    
+    @league = League.new
+    @tournament = Tournament.new
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @shooter }

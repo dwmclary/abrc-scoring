@@ -38,6 +38,7 @@ AbrS::Application.routes.draw do
   match 'shooter/:id/breakdown' => "shooter#breakdown"
   match 'shooter/:id/join_league' => "shooter#join_league"
   match 'shooter/:id/enter_tournament' => "shooter#enter_tournament"
+  match 'shooter/enter_tournament' => "shooter#enter_tournament"
   match 'shooter/join_league' => 'shooter#join_league'
   match 'sessions/new' => 'sessions#new'
   match 'sessions/create' => 'sessions#create'
