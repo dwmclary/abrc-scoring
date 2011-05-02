@@ -36,15 +36,36 @@ AbrS::Application.routes.draw do
   match 'round/:id/show_shots' => 'round#show_shots'
   match 'round/:id/show_score' => 'round#show_score'
   match 'shooter/:id/breakdown' => "shooter#breakdown"
+  match 'shooter/:id/join_league' => "shooter#join_league"
+  match 'shooter/:id/enter_tournament' => "shooter#enter_tournament"
+  match 'shooter/join_league' => 'shooter#join_league'
   match 'sessions/new' => 'sessions#new'
   match 'sessions/create' => 'sessions#create'
 
-  
+
+  match 'league/show' => 'league#show'  
   match 'league/:id/show' => 'league#show'
-  match 'league/show' => 'league#show'
+  match 'league/index'
   match 'league/' => 'league#index'
   match 'league/new' => 'league#new'
   match 'league/create' => 'league#create'
+  match 'league/:id/results' => 'league#results'
+  match 'league/:id/scores' => 'league#scores'
+  match 'league/:id/update' => 'league#update'
+  
+  match 'admin/show' => 'admin#show'
+  match 'admin/show_shooters' => 'admin#show_shooters'
+  match 'admin/toggle_admin' => 'admin#toggle_admin'
+  match 'admin/delete_shooter' => 'admin#delete_shooter'
+  match 'tournament/show' => 'tournament#show'  
+  match 'tournament/:id/show' => 'tournament#show'
+  match 'tournament/index'
+  match 'tournament/' => 'tournament#index'
+  match 'tournament/new' => 'tournament#new'
+  match 'tournament/create' => 'tournament#create'
+  match 'tournament/:id/results' => 'tournament#results'
+  match 'tournament/:id/scores' => 'tournament#scores'
+  match 'tournament/:id/update' => 'tournament#update'
   
 
   # Sample resource route with options:

@@ -1,0 +1,21 @@
+<%= link_to "Administration Home", :action => "show"%>
+<table>
+    <thead>
+        <th>Name</th>
+        <th>Make Admin</th>
+        <th>Delete</th>
+    </thead>
+    <tbody>
+        <% for s in @shooters %>
+        <tr class=<%=cycle("even", "odd")%>>
+            <td><%=s.name%></td>
+            <% if !s.is_admin %>
+            <td><%= link_to "Make Admin", :controller => "admin", :action => "toggle_admin", :shooter => s.id%></td>
+            <% else %>
+            <td><%= link_to "Remove Admin", :controller => "admin", :action => "toggle_admin", :shooter => s.id%></td>
+            <% end %>
+            <td><%= link_to "Delete", :controller => "admin", :action => "delete_shooter", :shooter => s.id%></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>

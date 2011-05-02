@@ -10,11 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110422183306) do
+ActiveRecord::Schema.define(:version => 20110502033139) do
 
   create_table "league_members", :force => true do |t|
     t.integer  "league_id"
     t.integer  "shooter_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "league_scores", :force => true do |t|
+    t.integer  "league_id",  :null => false
+    t.integer  "shooter_id", :null => false
+    t.integer  "score",      :null => false
+    t.date     "shot_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -48,6 +57,8 @@ ActiveRecord::Schema.define(:version => 20110422183306) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "league_id"
+    t.integer  "arrow_score",    :default => 10
+    t.integer  "tournament_id"
   end
 
   create_table "sessions", :force => true do |t|
@@ -61,13 +72,38 @@ ActiveRecord::Schema.define(:version => 20110422183306) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "shooters", :force => true do |t|
-    t.string   "name",                           :null => false
+    t.string   "name",                               :null => false
     t.integer  "best_score",      :default => 0
     t.decimal  "average_score"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "hashed_password"
     t.string   "salt"
+    t.boolean  "is_admin",        :default => false
+    t.string   "email"
+  end
+
+  create_table "tournament_members", :force => true do |t|
+    t.integer  "tournament_id"
+    t.integer  "shooter_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tournament_scores", :force => true do |t|
+    t.integer  "tournament_id", :null => false
+    t.integer  "shooter_id",    :null => false
+    t.integer  "score",         :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tournaments", :force => true do |t|
+    t.string   "name",       :null => false
+    t.integer  "distance",   :null => false
+    t.date     "shot_at",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

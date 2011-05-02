@@ -1,15 +1,15 @@
 
-<h2 align="center">League Listing </h2>
+<h2 align="center">Tournament Listing </h2>
 <div style="float:left;width=100px;padding-left:300px">
 <p><%= link_to "Shooter Home", :controller => "shooter", :action => "show", :id => @shooter.id%></p>
 <% if @shooter.is_admin %>
-<p><%= link_to "Create League", :controller => "league", :action => "new"%></p>
+<p><%= link_to "Create Tournament", :controller => "tournament", :action => "new"%></p>
 <% end %>
 </div>
 <div style="float:left;padding-left:100px">
 <table>
     <thead>
-        <th>League</th>
+        <th>Tournament</th>
         <th>Distance</th>
         <% if @shooter.is_admin %>
         <th> ID </th>
@@ -17,24 +17,24 @@
         <% end %>
     </thead>
     <tbody>
-        <% for l in @league %>
+        <% for t in @tournament %>
         <tr class=<%=cycle("even", "odd")%>>
             <td>
-                <% if LeagueScore.find_all_by_league_id(l.id).count > 0 %>
-                <%= link_to l.name, :controller => "league", :action => "results", :id => l.id %>
+                <% if TournamentScore.find_all_by_tournament_id(t.id).count > 0 %>
+                <%= link_to t.name, :controller => "tournament", :action => "results", :id => t.id %>
                 <% else %>
-                <%= l.name %>
+                <%= t.name %>
                 <% end %>
             </td>
             <td> 
-                <%= l.distance %>
+                <%= t.distance %>
             </td>
             <% if @shooter.is_admin %>
             <td>
-                <%= l.id %>
+                <%= t.id %>
             </td>
             <td>
-                <%= link_to "Add Scores", :controller => "league", :action => "scores", :id => l.id%>
+                <%= link_to "Add Scores", :controller => "tournament", :action => "scores", :id => t.id%>
             </td>
             <%end %>
         </tr>

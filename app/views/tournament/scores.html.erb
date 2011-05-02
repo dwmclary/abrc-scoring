@@ -1,0 +1,18 @@
+<h2>Add Scores</h2>
+<% if flash[:notice] %>
+    <p id="notice" style="display:none">
+        <%= flash[:notice] %></p> 
+        <script type="text/javascript">
+            Effect.Appear($("notice"), { duration: 3.0 });
+            Effect.Fade($("notice"), { duration: 3.0 });
+        </script>
+<% end %>
+<% form_for @tournament_score, :url => {:controller => "tournament", :action => "update", :id => @tournament.id} do |f| %>
+    <%= label_tag "Shooter"%>
+    <%= select "tournament_score", "shooter_id", @tournament_shooters.collect {|p| [ p.name, p.id ] }, { :include_blank => true }%>
+    <%= f.label :score%>
+    <%= f.text_field :score%>
+    <%= f.hidden_field :tournament_id%>
+    <%= f.submit "OK", :remote => true%>
+<% end %>
+<%= link_to "Return to League", :controller => "league", :action => "show", :id => @tournament.id %>

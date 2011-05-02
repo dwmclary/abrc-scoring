@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def create 
-    if shooter = Shooter.authenticate(params[:name], params[:password])
+    if shooter = Shooter.authenticate(params[:name] ,params[:email], params[:password])
       session[:shooter_id] = shooter.id
       puts "got shooter"
       redirect_to :controller => "shooter", :action => "show", :id => shooter.id

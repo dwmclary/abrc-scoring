@@ -4,9 +4,24 @@ function BUDEffect(element){
     new Effect.toggle(element,'Blind', {duration:0.5});
 }
 </script>
+<% if flash[:notice] %>
+    <p id="notice" style="display:none">
+        <%= flash[:notice] %></p> 
+        <script type="text/javascript">
+            Effect.Appear($("notice"), { duration: 3.0 });
+            Effect.Fade($("notice"), { duration: 3.0 });
+        </script>
+<% end %>
+
 <div style="float:left;padding:20px">
     <h2><%=@shooter.name%></h2>
-    <p><%= link_to "Personal Summary", :action => "results", :id => @shooter.id%></p>
+    <h3><%=@shooter.email%></h3>
+    <% if @shooter.is_admin %>
+        <p><%= link_to "Administration", :controller => "admin", :action => "show" %></p>
+    <% end %>
+    <% if @shooter.rounds.size > 0%>
+        <p><%= link_to "Personal Summary", :action => "results", :id => @shooter.id%></p>
+    <% end %>
     <p><%= link_to "Logout", :controller => "sessions", :action => "destroy"%></p>
 </div>
 <div style="float:left;padding:20px">
@@ -16,11 +31,33 @@ function BUDEffect(element){
 
 <div style="float:left;padding-top:20px">
 <p><%= link_to "New Round", :controller => "round", :action => "new"%></p>
-<p><%= link_to "Join League" %></p>
+<p><%= link_to "View Leagues", :controller => "league", :action => "index"%>
+<p><%= link_to "View Tournaments", :controller => "tournament", :action => "index"%>    
+<p><%= link_to_function "Join League", "BUDEffect($(league_form))"%></p>
+<p><%= link_to_function "Enter Tournament", "BUDEffect($(tournament_form))"%></p>
 <p><%=link_to_function "Previous Rounds", 'BUDEffect($(previous_rounds));'%></p>
+
+<div style="float:left;display:none" id="league_form">
+    <% form_tag(:controller => "shooter", :action => "join_league") do %>
+            <%= label_tag "League ID" %>
+            <%= text_field_tag :league_id %>
+            <%= submit_tag "Join" %>
+    <% end %>
 </div>
-<div style="float:left;width:500px;display:none" id="previous_rounds">
+
+<div style="float:left;display:none" id="tournament_form">
+    <% form_tag(:controller => "shooter", :action => "enter_tournament") do %>
+            <%= label_tag "Tournament ID" %>
+            <%= text_field_tag :tournament_id %>
+            <%= submit_tag "Enter" %>
+    <% end %>
+</div>
+
+<div style="width:100px;display:none" id="previous_rounds">
+    <p>
     <% for r in @old_rounds %>
         <%= link_to r["date"], :controller => "round", :action => "results", :id => r["id"]%>
     <% end %>
+    </p>
+</div>
 </div>

@@ -11,9 +11,9 @@ function BounceEffect(element){
 <% form_for @round_end, :url => {:controller => "round", :action => "update"} do |f| %>
     <table>
         <thead>
-            <th>Shot 1</th>
-            <th>Shot 2</th>
-            <th>Shot 3</th>
+            <%for i in (1..@round.arrow_count) do%>
+            <th>Shot <%= i%></th>
+            <% end%>
             <th>X's</th>
         </thead>
         <tbody>

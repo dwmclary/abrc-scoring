@@ -32,6 +32,8 @@ GEM
     builder (2.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    gsl (1.14.7)
+      narray (>= 0.5.9)
     i18n (0.5.0)
     mail (2.2.15)
       activesupport (>= 2.3.6)
@@ -39,6 +41,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    narray (0.5.9.9)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -69,5 +72,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  gsl
   rails (= 3.0.4)
   sqlite3

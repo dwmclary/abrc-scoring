@@ -11,15 +11,20 @@ function BUDEffect(element){
 <div id="round_info" align="center">
     <h2> Round Information </h2>
     <% form_for @round , :url => { :controller => "round", :action => "create"} do |f|  %>
+        <%=select_tag "round_type", options_for_select(@type_select)%>
         <table>
             <thead>
             <th><%= f.label :end_count %></th>
             <th><%= f.label :arrow_count %></th>
+            <th><%= f.label :arrow_score %>
+            <th><%= f.label :shot_at %>
             </thead>
             <tbody>
                 <tr>
                     <td><%= f.text_field :end_count %></td>
                     <td><%= f.text_field :arrow_count %></td>
+                    <td><%= f.text_field :arrow_score %></td>
+                    <td><%= f.date_select :shot_at %></td>
                     <td><%= f.submit "Start" %></td>
                 </tr>
     <% end %>

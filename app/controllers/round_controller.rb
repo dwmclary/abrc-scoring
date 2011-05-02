@@ -1,12 +1,24 @@
 require 'round_end'
 require 'round'
 class RoundController < ApplicationController
-  SCORES_ARRAY = Array.new(11) {|i| i}
+
   
   def new
-    puts session[:shooter_id]
-    @possible_scores = SCORES_ARRAY
+    @shooter = Shooter.find(session[:shooter_id])
+    leagues = LeagueMember.find_all_by_shooter_id(@shooter.id).map(&:league_id).uniq
+    leagues = League.find(leagues)
+    tournaments = TournamentMember.find_all_by_shooter_id(@shooter.id).map(&:tournament_id).uniq
+    tournaments = Tournament.find(tournaments)
+    @type_select = [["Practice","practice:0"]]
+    leagues.each{|l|
+      @type_select.push([l.name,"league:"+l.id.to_s])
+    }
+    tournaments.each{|t|
+      @type_select.push([t.name,"tournament:"+t.id.to_s])
+    }
     @round = Round.new
+    @possible_scores = Array.new(@round.arrow_score) {|i| i}
+    
     respond_to do |format|
       format.html 
       format.json {render :json => @round}
@@ -37,15 +49,16 @@ class RoundController < ApplicationController
   end
   
   def show
+    @round = Round.find(params["id"])
+    
     @round_end = RoundEnd.new
-    @possible_scores = SCORES_ARRAY
+    @possible_scores = Array.new(@round.arrow_score) {|i| i}
     if params["last_score"]
       @last_score = params["last_score"].to_i
     else
       @last_score = 0
     end
     
-    @round = Round.find(params["id"])
     @round_end.round_id = @round.id
     @score_sheet = @round.round_ends
     # puts @score_sheet.size
@@ -112,9 +125,19 @@ class RoundController < ApplicationController
   end
   
   def create
+    @round = Round.new(params[:round])
+    round_type = params["round_type"].split(":").first
+    type_id = params["round_type"].split(":").last.to_i
+
     @round_end = RoundEnd.new
-    @possible_scores = SCORES_ARRAY
+    @possible_scores = Array.new(@round.arrow_score) {|i| i}
     @new_round = Round.create :shooter_id => session[:shooter_id], :shot_at => Date.today, :total_score => 0, :total_bullseye => 0, :end_count => params["round"]["end_count"], :arrow_count => params["round"]["arrow_count"]
+    if round_type == "league"
+      @new_round.league_id = type_id
+    elsif round_type == "tournament"
+      @new_round.tournament_id = type_id
+    end
+    @new_round.save
     @score_sheet = @new_round.round_ends
     respond_to do |format|
       format.html {redirect_to :controller => :round, :action => :show, :id => @new_round.id}

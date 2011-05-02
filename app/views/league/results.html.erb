@@ -1,0 +1,124 @@
+<%= javascript_include_tag "protovis-d3.2.js"%>
+<%= javascript_include_tag :defaults %>
+<%= csrf_meta_tag %>
+<h2 align="center"><%= @league.name %> Results </h2>
+<div style="float:left;width=100px;padding-top:100px">
+<p><%= link_to "Shooter Home", :controller => "shooter", :action => "show", :id => @shooter.id%></p>
+<p><%= link_to "League Listing", :controller => "league", :action => "show"%></p>
+</div>
+<div id="center"><div id="fig">
+<script type="text/javascript+protovis">
+
+    var rounds = [];
+    <% count = 1 %>
+    <% for b in @boxes %>
+    var r_<%=count%> = <%= raw b.to_json %>;
+    rounds.push(r_<%=count%>);
+    <% count += 1 %>
+    <% end %>
+    var scores = <%=array_or_string_for_javascript @shooter_scores%>.map(parseFloat);
+    
+    var score_data = pv.range(0, <%=@shooter_scores.size%>, 1).map(function(x) {
+        return {x: x+1, y: scores[x]};
+      });
+      
+    var w = 860,
+        h = 400,
+        x = pv.Scale.ordinal(<%= array_or_string_for_javascript Array.new(@boxes.length){|i| (i+1).to_s}%>).splitBanded(0, w, 3/5)
+        x_l = pv.Scale.linear(score_data, function(d) d.x).range(0, w),
+        y = pv.Scale.linear(<%=@min%>-10,<%=@max%>+10).range(0, h)
+        s = x.range().band / 2;
+
+    var vis = new pv.Panel().canvas("end_bar_chart")
+        .width(w)
+        .height(h)
+        .margin(20);
+
+    /* Add the y-axis rules */
+    vis.add(pv.Rule)
+        .data(y.ticks())
+        .bottom(y)
+        .strokeStyle(function(d) (d == 0 || d == 1) ? "#000" : "#ccc")
+      .anchor("left").add(pv.Label)
+        .text(y.tickFormat);
+
+    /* Add a panel for each data point */
+    var points = vis.add(pv.Panel)
+        .data(rounds)
+        .left(function(d) x(d.id))
+        .width(s * 2);
+
+    /* Add the experiment id label */
+    points.anchor("bottom").add(pv.Label)
+        .textBaseline("top")
+        .text(function(d) d.id);
+
+    /* Add the range line */
+    points.add(pv.Rule)
+        .left(s)
+        .bottom(function(d) y(d.min))
+        .height(function(d) y(d.max) - y(d.min));
+
+    /* Add the min and max indicators */
+    points.add(pv.Rule)
+        .data(function(d) [d.min, d.max])
+        .bottom(y)
+        .left(s / 2)
+        .width(s);
+
+    /* Add the upper/lower quartile ranges */
+    points.add(pv.Bar)
+        .bottom(function(d) y(d.lq))
+        .height(function(d) y(d.uq) - y(d.lq))
+        .fillStyle(function(d) (d.id % 2) == 0 ? "#aec7e8" : "#FFBB78")
+        .strokeStyle("black")
+        .lineWidth(2)
+        .antialias(false);
+
+    /* Add the median line */
+    points.add(pv.Rule)
+        .bottom(function(d) y(d.median));
+    
+    /* A panel for each data series. */
+    var panel = vis.add(pv.Panel)
+        .data(score_data);
+        
+    /* The line. */
+    var line = panel.add(pv.Line)
+        .data(score_data)
+        .left(function(d) x(d.x))
+        .bottom(function(d) y(d.y))
+        .interpolate("step-after")
+        .lineWidth(3);
+    
+    var i = -1;
+    var dot = line.add(pv.Dot)
+        .visible(function() i >= 0)
+        .data(function() [score_data[i]])
+        .fillStyle(function() line.strokeStyle())
+        .strokeStyle("#000")
+        .size(20)
+        .lineWidth(1);
+        
+    dot.add(pv.Dot)
+        .left(10)
+        .bottom(10)
+      .anchor("right").add(pv.Label)
+        .text(function(d) d.y.toFixed(2));
+        
+    vis.add(pv.Bar)
+        .fillStyle("rgba(0,0,0,.001)")
+        .event("mouseout", function() {
+            i = -1;
+            return vis;
+          })
+        .event("mousemove", function() {
+            var mx = x_l.invert(vis.mouse().x);
+            i = pv.search(score_data.map(function(d) {return d.x}), mx);
+            i = i < 0 ? (-i - 2) : i;
+            return vis;
+          });
+
+    vis.render();
+
+</script>
