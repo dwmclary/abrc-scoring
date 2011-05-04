@@ -3,12 +3,18 @@
 <head>
   <title>AbrS</title>
   <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag "blueprint/screen.css", :media=>"screen"%>
+  <%= stylesheet_link_tag "blueprint/screen.css", :media=>"projection"%>
+  <%= stylesheet_link_tag "blueprint/print.css", :media=>"print"%>
+  <!--[if lt IE 8]>
+    <%= stylesheet_link_tag "blueprint/ie.css",  :media=>"all"%>
+  <![endif]--></code></pre>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
 <body>
-
+<div class="container">
 <%= yield %>
-
+</div>
 </body>
 </html>

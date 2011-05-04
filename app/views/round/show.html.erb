@@ -6,7 +6,10 @@ function BounceEffect(element){
     new Effect.Shake(element, {distance: 10});
 }
 </script>
-<div id="end_score" align="center">
+
+
+<div class="span-7 prepend-7" id="end_score">
+
 <% if @score_sheet.size < 10 %>
 <% form_for @round_end, :url => {:controller => "round", :action => "update"} do |f| %>
     <table>
@@ -32,4 +35,9 @@ function BounceEffect(element){
 <%= link_to "Results", :action => "results", :id => @round.id%>
 <% end %>
 </div>
+<div class="clear"></div>
+<div class="span-7 prepend-7 last">
 <%= render "score_sheet"%>
+</div>
+
+

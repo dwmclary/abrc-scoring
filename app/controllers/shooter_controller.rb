@@ -6,7 +6,13 @@ class ShooterController < ApplicationController
     @league = League.new
     @tournament = Tournament.new
     if !params[:notice].nil?
-      flash[:notice] = params[:notice]
+      if params[:notice_type] == "notice"
+        flash[:notice] = params[:notice]
+      elsif params[:notice_type] == "success"
+        flash[:success] = params[:success]
+      elsif params[:notice_type] == "error"
+        flash[:error] = params[:error]
+      end
     end
     respond_to do |format|
       if @shooter.save
@@ -39,7 +45,13 @@ class ShooterController < ApplicationController
     @league = League.new
     @tournament = Tournament.new
     if !params[:notice].nil?
-      flash[:notice] = params[:notice]
+      if params[:notice_type] == "notice"
+        flash[:notice] = params[:notice]
+      elsif params[:notice_type] == "success"
+        flash[:success] = params[:success]
+      elsif params[:notice_type] == "error"
+        flash[:error] = params[:error]
+      end
     end
     respond_to do |format|
       format.html
@@ -50,16 +62,20 @@ class ShooterController < ApplicationController
   def join_league
     id = params[:league_id]
     shooter = Shooter.find(session[:shooter_id])
+    state = "error"
     if !League.exists?(id)
       join_string = "No such league to join"
+      state = "notice"
     else
       if shooter.join_league(id)
         join_string = "League joined!"
+        state = "success"
       else
         join_string = "Error joining league"
+        state = "error"
       end
     end
-    redirect_to :action => "show", :notice => join_string
+    redirect_to :action => "show", :notice => join_string, :notice_type => state
   end
   
   def enter_tournament
@@ -67,14 +83,17 @@ class ShooterController < ApplicationController
     shooter = Shooter.find(session[:shooter_id])
     if !Tournament.exists?(id)
       join_string = "No such tournament to enter"
+      state = "notice"
     else
       if shooter.enter_tournament(id)
         join_string = "Tournament Entered!"
+        state = "success"
       else
         join_string = "Error entering tournament"
+        state = "error"
       end
     end
-    redirect_to :action => "show", :notice => join_string
+    redirect_to :action => "show", :notice => join_string, :notice_type => state
   end
   
   def results

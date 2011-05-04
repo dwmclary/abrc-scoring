@@ -6,6 +6,7 @@
 <div id="score_sheet" align="center">
 <table>
     <thead>
+        <th>End</th>
         <% for s in Array.new(@score_sheet.first.arrow_count){|i| 1+i} %>
             <th> Arrow <%= s %> </th>
         <% end %>
@@ -13,14 +14,17 @@
             <th> X's</th>
     </thead>
     <tbody>
+        <% count = 1 %>
         <% for s in @score_sheet %>
             <tr class=<%=cycle("even", "odd")%>>
+                <td><%= count %></td>
                 <% for c in s.scores.split(",")%>
                     <td> <%= c %> </td>
                 <% end %>
                     <td> <%= s.scores.split(",").map{|i| i.to_i}.sum %></td>
                     <td> <%= s.x_count%></td>
             </tr>
+            <% count += 1%>
         <% end %>
     </tbody>
 </table>

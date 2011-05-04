@@ -4,40 +4,43 @@ function BUDEffect(element){
     new Effect.toggle(element,'Blind', {duration:0.5});
 }
 </script>
-<% if flash[:notice] %>
-    <p id="notice" style="display:none">
-        <%= flash[:notice] %></p> 
-        <script type="text/javascript">
-            Effect.Appear($("notice"), { duration: 3.0 });
-            Effect.Fade($("notice"), { duration: 3.0 });
-        </script>
-<% end %>
 
-<div style="float:left;padding:20px">
-    <h2><%=@shooter.name%></h2>
-    <h3><%=@shooter.email%></h3>
-    <% if @shooter.is_admin %>
-        <p><%= link_to "Administration", :controller => "admin", :action => "show" %></p>
+    <h1><%=@shooter.name%></h1>
+    <hr>
+    <h2 class="alt"><%=@shooter.email%></h2>
+    <%= link_to "Logout", :controller => "sessions", :action => "destroy"%>
+    <hr>
+<div class="span-24">
+    <% if flash[:notice]%>
+        <div class="notice">
+            <%= flash[:notice] %>
+        </div>
+    <% elsif flash[:success]%>
+            <div class="success">
+                <%= flash[:success] %>
+            </div>
+    <% elsif flash[:error]%>
+            <div class="error">
+                <%= flash[:success] %>
+            </div>
     <% end %>
-    <% if @shooter.rounds.size > 0%>
-        <p><%= link_to "Personal Summary", :action => "results", :id => @shooter.id%></p>
-    <% end %>
-    <p><%= link_to "Logout", :controller => "sessions", :action => "destroy"%></p>
-</div>
-<div style="float:left;padding:20px">
-    <p><b>Best Score </b> <b style="font-size:24px;color:#1E72AC"> <%=@shooter.best_score%></b></p>
-    <p><b>Average Score </b> <b style="font-size:24px;color:#1E72AC"> <%='%.1f' % @shooter.average_score%></b></p>
+<div class="span-4"><b>Best Score </b> <b style="font-size:24px;color:#1E72AC"> <%=@shooter.best_score%></b></div>
+<div class="append-1"></div>
+<div class="span-4 last"><b>Average Score </b> <b style="font-size:24px;color:#1E72AC"> <%='%.1f' % @shooter.average_score%></b></div>
 </div>
 
-<div style="float:left;padding-top:20px">
-<p><%= link_to "New Round", :controller => "round", :action => "new"%></p>
-<p><%= link_to "View Leagues", :controller => "league", :action => "index"%>
-<p><%= link_to "View Tournaments", :controller => "tournament", :action => "index"%>    
-<p><%= link_to_function "Join League", "BUDEffect($(league_form))"%></p>
-<p><%= link_to_function "Enter Tournament", "BUDEffect($(tournament_form))"%></p>
-<p><%=link_to_function "Previous Rounds", 'BUDEffect($(previous_rounds));'%></p>
 
-<div style="float:left;display:none" id="league_form">
+<div class="span-4 first">
+    <ul>
+        <li><%= link_to "New Round", :controller => "round", :action => "new"%></li>
+        <li><%= link_to "View Leagues", :controller => "league", :action => "index"%></li>
+        <li><%= link_to "View Tournaments", :controller => "tournament", :action => "index"%></li>
+        <li><%= link_to_function "Join League", "BUDEffect($(league_form))"%></li>
+        <li><%= link_to_function "Enter Tournament", "BUDEffect($(tournament_form))"%></li>
+        <li><%=link_to_function "Previous Rounds", 'BUDEffect($(previous_rounds));'%></li>
+    </ul>
+
+<div class="span-7" style="display:none" id="league_form">
     <% form_tag(:controller => "shooter", :action => "join_league") do %>
             <%= label_tag "League ID" %>
             <%= text_field_tag :league_id %>
@@ -45,19 +48,28 @@ function BUDEffect(element){
     <% end %>
 </div>
 
-<div style="float:left;display:none" id="tournament_form">
+<div class="span-7" style="display:none" id="tournament_form">
     <% form_tag(:controller => "shooter", :action => "enter_tournament") do %>
             <%= label_tag "Tournament ID" %>
             <%= text_field_tag :tournament_id %>
             <%= submit_tag "Enter" %>
     <% end %>
 </div>
+</div>
 
-<div style="width:100px;display:none" id="previous_rounds">
-    <p>
+<div class="span-10" style="display:none" id="previous_rounds">
     <% for r in @old_rounds %>
         <%= link_to r["date"], :controller => "round", :action => "results", :id => r["id"]%>
     <% end %>
-    </p>
+
 </div>
+<div class="span-7 last">
+    <ul>
+    <% if @shooter.is_admin %>
+        <li><%= link_to "Administration", :controller => "admin", :action => "show" %></li>
+    <% end %>
+    <% if @shooter.rounds.size > 0%>
+        <li><%= link_to "Personal Summary", :action => "results", :id => @shooter.id%></li>
+    <% end %>
+    </ul>
 </div>
