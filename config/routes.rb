@@ -26,6 +26,7 @@ AbrS::Application.routes.draw do
   match 'round/create' => "round#create"
   match 'round/:id' => "round#show"
   match 'round/:id/results' => "round#results"
+  match 'round/:id/edit_score' => "round#edit_score"
 
   match 'shooter/new' => "shooter#new"  
   match 'shooter/create' => "shooter#create"
