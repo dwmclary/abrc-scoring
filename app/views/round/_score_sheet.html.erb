@@ -1,25 +1,28 @@
+<%= javascript_include_tag "tablekit.js"%>
 <%if @score_sheet.size > 0 %>
 <div id="current_score" align="center">
     Current Score <%=@score_sheet.map{|s| s.end_score}.sum%></br>
     X's <%= @score_sheet.map{|s| s.x_count}.sum%>
 </div>
 <div id="score_sheet" align="center">
-<table>
+<table class="sortable editable" id="score_table">
     <thead>
+        <tr>
         <th>End</th>
         <% for s in Array.new(@score_sheet.first.arrow_count){|i| 1+i} %>
             <th> Arrow <%= s %> </th>
         <% end %>
             <th> End Total </th>
             <th> X's</th>
+        </tr>
     </thead>
     <tbody>
         <% count = 1 %>
         <% for s in @score_sheet %>
-            <tr class=<%=cycle("even", "odd")%>>
+            <tr class=<%=cycle("roweven", "rowodd")%>>
                 <td><%= count %></td>
                 <% for c in s.scores.split(",")%>
-                    <td> <%= c %> </td>
+                    <td> <%= c %></span> </td>
                 <% end %>
                     <td> <%= s.scores.split(",").map{|i| i.to_i}.sum %></td>
                     <td> <%= s.x_count%></td>
@@ -29,6 +32,12 @@
     </tbody>
 </table>
 </div>
+<script type="text/javascript">
+var table = $("score_table");
+    TableKit.Sortable.init(table);
+    TableKit.Rows.stripe(table);
+    TableKit.options.editAjaxURI = 'edit_score';
+</script>
 <script type="text/javascript">
     BounceEffect($("current_score"));
 </script>

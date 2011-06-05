@@ -1,7 +1,6 @@
 require 'round_end'
 require 'round'
 class RoundController < ApplicationController
-
   
   def new
     @shooter = Shooter.find(session[:shooter_id])
@@ -22,6 +21,33 @@ class RoundController < ApplicationController
     respond_to do |format|
       format.html 
       format.json {render :json => @round}
+    end
+  end
+  
+  def edit_score
+    #get the round end from the params
+    rend = params["row"].to_i
+    rscore = params["cell"].to_i
+    new_value = params["value"].to_i
+    @round = Round.find(params["id"])
+    @editing_end = @round.round_ends.find_by_end_count(rend)
+    if ((rscore > 1) and (rscore <= @editing_end.arrow_count+1))
+      score_index = rscore-2
+      scores = @editing_end.scores.split(",").map{|s| s.to_i}
+      scores[score_index] = new_value
+      @round.total_score -= @editing_end.end_score
+      @editing_end.end_score = scores.sum
+      @round.total_score += @editing_end.end_score
+      @editing_end.scores = scores.join(",")
+      @round.save
+      @editing_end.save
+      
+    elsif (rscore == @editing_end.arrow_count+3)
+      @editing_end.x_count = new_value
+      @editing_end.save
+    end
+    respond_to do |format|
+      format.json {render :json => new_value}
     end
   end
   
