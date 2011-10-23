@@ -6,13 +6,12 @@ class LeagueController < ApplicationController
   end
   
   def show
-    @shooter = Shooter.find(session[:shooter_id])
+    @shooter = current_user
     if params[:id].nil?
       if @shooter.is_admin
         @league = League.order("created_at DESC")
       else
-        membership = LeagueMember.where(:shooter_id => @shooter.id).map(&:league_id)
-        puts membership
+        membership = LeagueMember.where(:user_id => @shooter.id).map(&:league_id)
         @league = League.find(membership)
       end
     else
@@ -27,8 +26,8 @@ class LeagueController < ApplicationController
     @league = League.find(params[:id])
     @league_score = LeagueScore.new
     @league_score.league_id = @league.id
-    shooter_ids = @league.league_members.map(&:shooter_id)
-    @league_shooters = Shooter.find(shooter_ids)
+    shooter_ids = @league.league_members.map(&:user_id)
+    @league_shooters = User.find(shooter_ids)
     if !params[:notice].nil?
       flash[:notice] = params[:notice]
     end
@@ -48,15 +47,30 @@ class LeagueController < ApplicationController
       
   end
   
-  def results
-    @shooter = Shooter.find(session[:shooter_id])
+  def boxplot
+    @shooter = current_user
     # get all the shooters in the league
-    
     @league = League.find(params[:id])
     # get the scores belonging to this shooter
-    @shooter_scores = LeagueScore.find_all_by_shooter_id_and_league_id(@shooter.id,@league.id).map(&:score)
-    
+    @shooter_scores = LeagueScore.find_all_by_user_id_and_league_id(@shooter.id,@league.id).map(&:score)
     @score_array = @league.get_results
+    @email_addresses = @league.email_addresses
+    scores_for_spline = @league.minimax
+    score_names = ["Best", "Worst"]
+    if @league.league_members.map{|lm| lm.user_id}.uniq.member? @shooter.id
+      scores_for_spline << @league.scores_for_user(current_user.id)
+      score_names << "Me"
+    end
+    
+    @round_performance = LazyHighCharts::HighChart.new('graph') do |f|
+        f.options[:chart][:defaultSeriesType]='line'
+        scores_for_spline.each_with_index do |e,i|
+          f.series(:name =>score_names[i], :data=>e, :yAxis => 0)
+        end
+
+        f.options[:title][:text]="League Rounds"
+      end
+
     @boxes = []
     count = 1
     for s in @score_array
@@ -83,6 +97,36 @@ class LeagueController < ApplicationController
       format.html
     end
   end
+  
+  def results
+    @shooter = current_user
+    # get all the shooters in the league
+    @league = League.find(params[:id])
+    # get the scores belonging to this shooter
+    @shooter_scores = LeagueScore.find_all_by_user_id_and_league_id(@shooter.id,@league.id).map(&:score)
+    
+    @score_array = @league.get_results
+    @email_addresses = @league.email_addresses
+    scores_for_spline = @league.minimax
+    score_names = ["Best", "Worst"]
+    if @league.league_members.map{|lm| lm.user_id}.uniq.member? @shooter.id
+      scores_for_spline << @league.scores_for_user(current_user.id)
+      score_names << "Me"
+    end
+    
+    @round_performance = LazyHighCharts::HighChart.new('graph') do |f|
+        f.options[:chart][:defaultSeriesType]='line'
+        scores_for_spline.each_with_index do |e,i|
+          f.series(:name =>score_names[i], :data=>e, :yAxis => 0)
+        end
+
+        f.options[:title][:text]="League Rounds"
+      end
+    
+    respond_to do |format|
+      format.html
+    end
+  end
 
   
   def new
@@ -90,7 +134,7 @@ class LeagueController < ApplicationController
   end
   
   def create
-    @shooter = Shooter.find(session[:shooter_id])
+    @shooter = current_user
     @league = League.new(params[:league])
     respond_to do |format|
       if @league.save

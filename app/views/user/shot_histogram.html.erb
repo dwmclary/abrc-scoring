@@ -1,0 +1,15 @@
+<%= javascript_include_tag "protovis-d3.2.js"%>
+<%= csrf_meta_tag %>
+<%= render "shooter_nav"%>
+<div class="row">
+<ul class="pills">
+<li><%= link_to "Round Performance", :controller => "user", :action => "results"%></li>
+<li class="active"><%= link_to "Arrow Distribution", :controller => "user", :action => "shot_histogram" %></li>
+</ul>
+</div>
+<div class="row">
+    <div class="span12 columns offset3">
+<h2 style="float:center"> Shot Breakdown </h2>
+<%= render "shot_histogram"%>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<%= render "admin_nav" %>
+<%= javascript_include_tag "jquery.tablesorter.min.js"%>
+<script>
+  $(function() {
+    $("table#shooterIndexTable").tablesorter({ sortList: [[1,0]] });
+  });
+</script>
+<h2> Administration </h2>
+<div class="row">
+<ul class="pills">
+    <li class="active"><%= link_to_if current_user.is_admin, "Manage Leagues", :controller => "administration", :action => "show_leagues" %></li>
+    <li><%= link_to_if current_user.is_admin, "Manage Shooters", :controller => "administration", :action => "show_users" %> </li>
+</ul>
+</div>
+
+<div class="row" style="padding-top: 40px; height:200px">
+<table class="zebra-striped" id="shooterIndexTable"> 
+  <thead> 
+    <tr> 
+	  <th class="blue">Name</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+    <% for s in @shooters %> 
+    <tr> 
+        <td><%=s.email%></td>
+        <% if !s.is_admin %>
+        <td><%= link_to "Make Admin", :controller => "administration", :action => "toggle_admin", :shooter => s.id%></td>
+        <% else %>
+        <td><%= link_to "Remove Admin", :controller => "administration", :action => "toggle_admin", :shooter => s.id%></td>
+        <% end %>
+        <td><%= link_to "Delete", :controller => "administration", :action => "delete_shooter", :shooter => s.id%></td>
+
+    </tr> 
+	<% end %>
+  </tbody> 
+</table>
+<%= will_paginate @shooters %>
+</div>

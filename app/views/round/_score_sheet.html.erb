@@ -1,4 +1,9 @@
 <%= javascript_include_tag "tablekit.js"%>
+<script >
+  $(function() {
+    $("table#score_sheet").tablesorter({ sortList: [[1,0]] });
+  });
+</script>
 <%if @score_sheet.size > 0 %>
 <div id="current_score" align="center">
     Current Score <%=@score_sheet.map{|s| s.end_score}.sum%></br>

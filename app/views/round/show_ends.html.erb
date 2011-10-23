@@ -1,9 +1,13 @@
-<%= javascript_include_tag "protovis-d3.2.js"%>
-<%= csrf_meta_tag %>
-<div style="float:left;width=100px;padding-top:100px">
-<p><%= link_to "Shooter Home", :controller => "shooter", :action => "show", :id => @round.shooter_id%></p>
-<p><%= link_to "End Performance", :controller => "round", :action => "show_ends", :id => @round.id%></p>
-<p><%= link_to "Arrow Distribution", :controller => "round", :action => "show_dist", :id => @round.id %></p>
-<p><%= link_to "Score Sheet", :controller => "round", :action => "show_score", :id => @round.id%>
+<%= render "round_nav"%>
+<div class="row">
+<ul class="pills">
+<li class="active"><%= link_to "End Performance", :controller => "round", :action => "show_ends", :id => @round.id%></li>
+<li><%= link_to "Arrow Distribution", :controller => "round", :action => "show_dist", :id => @round.id %></li>
+<li><%= link_to "Score Sheet", :controller => "round", :action => "show_score", :id => @round.id%></li>
+</ul>
 </div>
-<%= render("end_chart")%>
+<div class="container">
+    <%= high_chart('end_chart', @end_performance) do %>
+    	<%= "options.tooltip.formatter = function() { return this.y;}" %>
+    <% end %>
+</div>

@@ -9,7 +9,7 @@
 <% end %>
 <% form_for @tournament_score, :url => {:controller => "tournament", :action => "update", :id => @tournament.id} do |f| %>
     <%= label_tag "Shooter"%>
-    <%= select "tournament_score", "shooter_id", @tournament_shooters.collect {|p| [ p.name, p.id ] }, { :include_blank => true }%>
+    <%= select "tournament_score", "User.find", @tournament_shooters.collect {|p| [ p.name, p.id ] }, { :include_blank => true }%>
     <%= f.label :score%>
     <%= f.text_field :score%>
     <%= f.hidden_field :tournament_id%>

@@ -6,7 +6,7 @@ class TournamentController < ApplicationController
   end
   
   def show
-    @shooter = Shooter.find(session[:shooter_id])
+    @shooter = User.find(session[:shooter_id])
     if @shooter.nil?
       puts "shooter is nil"
     end
@@ -31,7 +31,7 @@ class TournamentController < ApplicationController
     @tournament_score.tournament_id = @tournament.id
     shooter_ids = @tournament.tournament_members.map(&:shooter_id)
     puts shooter_ids
-    @tournament_shooters = Shooter.find(shooter_ids)
+    @tournament_shooters = User.find(shooter_ids)
     if !params[:notice].nil?
       flash[:notice] = params[:notice]
     end
@@ -52,13 +52,13 @@ class TournamentController < ApplicationController
   end
   
   def results
-    @shooter = Shooter.find(session[:shooter_id])
+    @shooter = User.find(session[:shooter_id])
     # get all the shooters in the tournament
     
     @tournament = Tournament.find(params[:id])
     # get the scores belonging to this shooter
     shooter_results = TournamentScore.find_all_by_tournament_id(@shooter.id,@tournament.id,:order => "score DESC")
-    shooter_names = Shooter.find(shooter_results.map(&:shooter_id)).map(&:name)
+    shooter_names = User.find(shooter_results.map(&:shooter_id)).map(&:name)
     @shooter_scores = shooter_names.zip(shooter_results.map(&:score))
     
     respond_to do |format|
@@ -72,7 +72,7 @@ class TournamentController < ApplicationController
   end
   
   def create
-    @shooter = Shooter.find(session[:shooter_id])
+    @shooter = User.find(session[:shooter_id])
     @tournament = Tournament.new(params[:tournament])
     respond_to do |format|
       if @tournament.save

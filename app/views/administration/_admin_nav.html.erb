@@ -1,0 +1,61 @@
+<div class="topbar-wrapper" style="z-index: 5;"> 
+  <div class="topbar" data-dropdown="dropdown" > 
+    <div class="topbar-inner"> 
+      <div class="container"> 
+        <h3><a href="#">Archery Bow Range Chicago: Scoring Center</a></h3> 
+        <ul class="nav"> 
+          <li class="active"><%= link_to "Shooter's Home", :controller => "user", :action => "show"%></li> 
+          <li class="dropdown"> 
+            <a href="#" class="dropdown-toggle">Rounds</a> 
+            <ul class="dropdown-menu"> 
+              <li><%= link_to "New Round", :controller => "round", :action => "new"%></li> 
+              <li class="divider"></li> 
+              <li><%= link_to "Past Rounds", :controller => "user", :action => "past_rounds", :id => current_user.id%></li> 
+            </ul> 
+        </li>
+          <li class="dropdown"> 
+            <a href="#" class="dropdown-toggle">Leagues</a> 
+            <ul class="dropdown-menu"> 
+              <li><a class="btn" data-controls-modal="modal-from-dom" data-backdrop="static" >Join League</a></li> 
+              <li class="divider"></li> 
+              <li><%= link_to "Past Leagues", :controller => "league", :action => "index"%></li> 
+            </ul> 
+        </li>
+        </ul> 
+      </div> 
+    </div><!-- /topbar-inner --> 
+  </div><!-- /topbar --> 
+</div><!-- /topbar-wrapper -->
+<% unless alert.nil?%>
+<div class="span12 columns"> 
+      <div class="alert-message warning">
+		<%= alert %>
+	  </div>
+</div>
+<% end %>
+<% unless notice.nil?%>
+<div class="span12 columns"> 
+      <div class="alert-message warning">
+		<%= notice %>
+	  </div>
+</div>
+<% end %>
+<!--  modal content -->
+<div id="modal-scoreupload-from-dom" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">&times;</a>
+    <h3>Upload a Round Score</h3>
+  </div>
+  <div class="modal-body" style="width:200px">
+      <%= form_tag "/administration/upload", :multipart => true do |f| -%>
+        <%= label_tag "Email" %>
+        <%= text_field_tag :email %>
+        <%= label_tag "League ID" %>
+        <%= text_field_tag :league_id %></br>
+        <%= select_date Date.today, :prefix => :shot_at %></br>
+        <%= label_tag "CSV File"%>
+        <%= file_field_tag :csv %>
+        <%= submit_tag "Upload", :disable_with => 'Uploading...' %>
+      <% end -%>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 class CreateRoundEnds < ActiveRecord::Migration
   def self.up
     create_table :round_ends do |t|
-      t.integer :shooter_id, :null => false
+      t.integer :user_id, :null => false
       t.integer :round_id, :null => false
       t.integer :end_count, :null => false
       t.integer :arrow_count, :null => false, :default => 3

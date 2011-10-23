@@ -1,0 +1,20 @@
+<div class="span4 columns">
+<h2>Sign in</h2>
+<div class="span12 columns">
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+	<div class="row">
+	<%= f.label :email %>
+  	<%= f.email_field :email, :class => "xlarge" %></br>
+	</div>
+	<div class="row">
+	<%= f.label :password %>
+  	<%= f.password_field :password, :class => "xlarge" %></br>
+	</div>
+	<% if devise_mapping.rememberable? %>
+  	<%= f.check_box :remember_me %> <%= f.label :remember_me %>
+    <% end %>
+	<div class="input"><%= f.submit "Sign in" , :class => "btn large"%></div>
+
+<% end %>
+</div>
+<%= render :partial => "devise/shared/links" %>

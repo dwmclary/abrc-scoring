@@ -1,0 +1,26 @@
+<%= javascript_include_tag "jquery.tablesorter.min.js"%>
+<%= render "shooter_nav"%>
+<script>
+  $(function() {
+    $("table#trafficIndexTable").tablesorter({ sortList: [[1,0]] });
+  });
+</script>
+
+<div class="row" style="padding-top: 40px">
+<table class="zebra-striped" id="trafficIndexTable"> 
+  <thead> 
+    <tr> 
+	  <th class="blue">Date</th> 
+      <th class="red">Score</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+	<% for r in @rounds %>
+    <tr> 
+      <td><%= link_to "#{r.shot_at}", :controller => "round", :action => "results", :id => r.id%></td> 
+	  <td><%= link_to "#{r.total_score}", :controller => "round", :action => "results", :id => r.id%></td> 
+    </tr> 
+	<% end %>
+  </tbody> 
+</table>
+</div>

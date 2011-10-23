@@ -1,0 +1,9 @@
+<%= render "league_nav"%>
+<div class="row">
+<ul class="pills">
+<li><%= link_to "Round Summary", :controller => "league", :action => "results", :id => @league.id%></li>
+<li class="active"><%= link_to "Round Details", :controller => "league", :action => "boxplot", :id => @league.id %></li>
+</ul>
+</div>
+<h2 align="center"><%= @league.name %> Results </h2>
+<%= render "boxplot"%>

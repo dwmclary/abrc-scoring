@@ -3,10 +3,10 @@ require 'round'
 class RoundController < ApplicationController
   
   def new
-    @shooter = Shooter.find(session[:shooter_id])
-    leagues = LeagueMember.find_all_by_shooter_id(@shooter.id).map(&:league_id).uniq
+    @shooter = current_user
+    leagues = LeagueMember.find_all_by_user_id(@shooter.id).map(&:league_id).uniq
     leagues = League.find(leagues)
-    tournaments = TournamentMember.find_all_by_shooter_id(@shooter.id).map(&:tournament_id).uniq
+    tournaments = TournamentMember.find_all_by_user_id(@shooter.id).map(&:tournament_id).uniq
     tournaments = Tournament.find(tournaments)
     @type_select = [["Practice","practice:0"]]
     leagues.each{|l|
@@ -52,6 +52,7 @@ class RoundController < ApplicationController
   end
   
   def results
+    @shooter = current_user
     @round = Round.find(params["id"])
     @round_ends = @round.round_ends
     rends = @round_ends.map{|r| r.scores.split(",").map{|i| i.to_i}}
@@ -97,6 +98,7 @@ class RoundController < ApplicationController
   end
   
   def show_ends
+  @shooter = current_user
    @round = Round.find(params["id"])
     @round_ends = @round.round_ends
     rends = @round_ends.map{|r| r.scores.split(",").map{|i| i.to_i}}
@@ -112,6 +114,16 @@ class RoundController < ApplicationController
       end
       @end_scores.push(entry)
     end
+    
+    @end_performance = LazyHighCharts::HighChart.new('graph') do |f|
+        f.options[:chart][:defaultSeriesType]='spline'
+        @end_scores.each_with_index do |e,i|
+          name = "#{(i+1).ordinalize}-Best Arrow"
+          f.series(:name =>name, :data=>e, :yAxis => 0)
+        end
+        f.options[:xAxis]= {:categories => Array.new(@end_scores.length){|i| i+1}}
+        f.options[:title][:text]="End-over-End Perfomance"
+      end
     respond_to do |format|
       format.html
     end
@@ -158,7 +170,7 @@ class RoundController < ApplicationController
 
     @round_end = RoundEnd.new
 
-    @new_round = Round.create :shooter_id => session[:shooter_id], :shot_at => Date.today, :total_score => 0, :total_bullseye => 0,
+    @new_round = Round.create :user_id => current_user.id, :shot_at => Date.today, :total_score => 0, :total_bullseye => 0,
       :end_count => params["round"]["end_count"], :arrow_count => params["round"]["arrow_count"], :arrow_score => params["round"]["arrow_score"]
     @possible_scores = Array.new(@new_round.arrow_score+1) {|i| i}
     if round_type == "league"
@@ -178,7 +190,7 @@ class RoundController < ApplicationController
     @round_end = RoundEnd.new
     @round_end.round_id = params["round_end"]["round_id"]
     @round = Round.find(@round_end.round_id)
-    @round_end.shooter_id = @round.shooter_id
+    @round_end.user_id = @round.user_id
     scores = []
     for s in params["shot"].keys do
           if s != "x"

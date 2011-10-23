@@ -4,11 +4,11 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_members
   
   def get_results
-    members = self.tournament_members.map{|lm| lm.shooter_id}.uniq
+    members = self.tournament_members.map{|lm| lm.user_id}.uniq
     member_rounds = []
     # for each member, get the scores
     members.each{|m|
-      member_scores = TournamentScore.find_all_by_shooter_id_and_tournament_id(m,self.id).map(&:score)
+      member_scores = TournamentScore.find_all_by_User.find_and_tournament_id(m,self.id).map(&:score)
       member_rounds.push(member_scores)
     }
     score_array = member_rounds.flatten

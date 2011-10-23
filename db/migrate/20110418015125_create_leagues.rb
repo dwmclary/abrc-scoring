@@ -3,7 +3,7 @@ class CreateLeagues < ActiveRecord::Migration
     create_table :leagues do |t|
       t.string :name, :null => false
       t.integer :distance
-
+      t.date :start_date
       t.timestamps
     end
   end

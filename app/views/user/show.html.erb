@@ -1,0 +1,19 @@
+<%= render "shooter_nav" %>
+
+<div class="container-fluid" style="padding-top:40px">
+    <div class="sidebar">
+        <ul>
+        <li><b><%=@shooter.email%></b></li>
+        <li><b>Best Score </b> <b style="font-size:16px;color:#1E72AC"> <%=@shooter.best_score%></b></li>
+        <li><b>Average Score </b> <b style="font-size:16px;color:#1E72AC"> <%='%.1f' % @shooter.average_score%></b></li>
+        <li><b><%= link_to_if @shooter.rounds.size > 0, "Personal Summary", :action => "results", :id => current_user.id%></b></li>
+        
+        </ul>
+    </div>
+    <div class="content">
+    </div>
+  </div>
+
+
+
+

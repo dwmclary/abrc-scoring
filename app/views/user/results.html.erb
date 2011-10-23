@@ -1,0 +1,12 @@
+<%= javascript_include_tag "protovis-d3.2.js"%>
+<%= csrf_meta_tag %>
+<%= render "shooter_nav"%>
+<div class="row">
+<ul class="pills">
+<li class="active"><%= link_to "Round Performance", :controller => "user", :action => "results"%></li>
+<li><%= link_to "Arrow Distribution", :controller => "user", :action => "shot_histogram" %></li>
+</ul>
+</div>
+<div class="container">
+    <%= high_chart('round_performance', @round_performance)%>
+</div>

@@ -1,0 +1,57 @@
+<%= render "admin_nav" %>
+<h2> Administration </h2>
+<div class="row">
+<ul class="pills">
+    <li class="active"><%= link_to_if current_user.is_admin, "Manage Leagues", :controller => "administration", :action => "show_leagues" %></li>
+    <li><%= link_to_if current_user.is_admin, "Manage Shooters", :controller => "administration", :action => "show_users" %> </li>
+</ul>
+</div>
+<%= javascript_include_tag "jquery.tablesorter.min.js"%>
+<script>
+  $(function() {
+    $("table#leagueIndexTable").tablesorter({ sortList: [[1,0]] });
+  });
+</script>
+
+<h2>League Listing </h2>
+<a class="btn" data-controls-modal="modal-scoreupload-from-dom" data-backdrop="static" >Upload Scores</a>
+<%= link_to "Create League", {:controller => "league", :action => "new"}, :class=>"btn"%>
+<div class="row" style="padding-top: 40px">
+<table class="zebra-striped" id="leagueIndexTable"> 
+  <thead> 
+    <tr> 
+	  <th class="blue">League</th> 
+      <th class="red">Distance</th>
+      <th class="green">Start Date</th> 
+      <% if @shooter.is_admin %>
+      <th class="yellow"> ID </th>
+      <%end%>
+    </tr> 
+  </thead> 
+  <tbody> 
+    <% for l in @league %>    
+    <tr> 
+        <td>
+            <% if LeagueScore.find_all_by_league_id(l.id).count > 0 %>
+            <%= link_to l.name, :controller => "league", :action => "results", :id => l.id %>
+            <% else %>
+            <%= l.name %>
+            <% end %>
+        </td>
+        <td> 
+            <%= l.distance %>
+        </td>
+        <td>
+            <%= l.start_date.to_s%>
+        </td>
+        <% if @shooter.is_admin %>
+        <td>
+            <%= l.id %>
+        </td>
+        <%end %>
+    </tr> 
+	<% end %>
+  </tbody> 
+</table>
+<%= will_paginate @league %>
+</div>

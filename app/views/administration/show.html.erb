@@ -1,0 +1,9 @@
+<%= render "admin_nav" %>
+<h2> Administration </h2>
+<div class="row">
+<ul class="pills">
+    <li><%= link_to_if current_user.is_admin, "Manage Leagues", :controller => "administration", :action => "show_leagues" %></li>
+    <li><%= link_to_if current_user.is_admin, "Manage Shooters", :controller => "administration", :action => "show_users" %> </li>
+</ul>
+</div>
+

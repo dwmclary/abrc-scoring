@@ -1,4 +1,7 @@
 AbrS::Application.routes.draw do
+
+  devise_for :users
+
   get "sessions/new"
 
   get "sessions/create"
@@ -28,10 +31,15 @@ AbrS::Application.routes.draw do
   match 'round/:id/results' => "round#results"
   match 'round/:id/edit_score' => "round#edit_score"
 
-  match 'shooter/new' => "shooter#new"  
-  match 'shooter/create' => "shooter#create"
-  match 'shooter/:id' => "shooter#show"
-  match 'shooter/:id/results' => "shooter#results"
+
+  match 'user/:id' => "user#show"
+  match 'user/:id/results' => "user#results"
+  match 'user/:id/past_rounds' => "user#past_rounds"
+  match 'user/:id/past_tournaments' => "user#past_tournaments"
+  match 'user/:id/shot_histogram' => 'user#shot_histogram'
+  match 'user/:id/join_league' => 'user#join_league'
+  match 'users/sign_out' => 'user#sign_out'
+  
   match 'round/:id/show_ends' => 'round#show_ends'
   match 'round/:id/show_dist' => 'round#show_dist'
   match 'round/:id/show_shots' => 'round#show_shots'
@@ -47,6 +55,7 @@ AbrS::Application.routes.draw do
 
   match 'league/show' => 'league#show'  
   match 'league/:id/show' => 'league#show'
+  match 'league/join' => 'league#join'
   match 'league/index'
   match 'league/' => 'league#index'
   match 'league/new' => 'league#new'
@@ -54,11 +63,14 @@ AbrS::Application.routes.draw do
   match 'league/:id/results' => 'league#results'
   match 'league/:id/scores' => 'league#scores'
   match 'league/:id/update' => 'league#update'
+  match 'league/:id/boxplot' => 'league#boxplot'
   
-  match 'admin/show' => 'admin#show'
-  match 'admin/show_shooters' => 'admin#show_shooters'
-  match 'admin/toggle_admin' => 'admin#toggle_admin'
-  match 'admin/delete_shooter' => 'admin#delete_shooter'
+  match 'administration/show' => 'administration#show'
+  match 'administration/upload' => 'administration#upload'
+  match 'administration/show_shooters' => 'administration#show_users'
+  match 'administration/show_leagues' => 'administration#show_leagues'
+  match 'administration/toggle_admin' => 'administration#toggle_admin'
+  match 'administration/delete_shooter' => 'administration#delete_shooter'
   match 'tournament/show' => 'tournament#show'  
   match 'tournament/:id/show' => 'tournament#show'
   match 'tournament/index'
@@ -106,7 +118,7 @@ AbrS::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => "sessions#new"
+  root :to => "user#show"
 
   # See how all your routes lay out with "rake routes"
 
