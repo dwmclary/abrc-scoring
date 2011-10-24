@@ -8,7 +8,7 @@ gem 'in_place_editing'
 
 gem 'sqlite3'
 gem 'devise'
-gem 'lazy_high_charts', :git => 'git://github.com/michelson/lazy_high_charts.git'
+gem 'lazy_high_charts'#, :git => 'git://github.com/michelson/lazy_high_charts.git'
 # Use unicorn as the web server
 # gem 'unicorn'
 
