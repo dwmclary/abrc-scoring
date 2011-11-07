@@ -48,6 +48,9 @@
         <td>
             <%= l.id %>
         </td>
+        <td>
+            <%= button_to "Delete", {:action => "delete_league", :id => l.id}, :confirm => "Are you sure?"%>
+        </td>
         <%end %>
     </tr> 
 	<% end %>

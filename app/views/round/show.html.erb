@@ -7,26 +7,26 @@ function BounceEffect(element){
 }
 </script>
 
-
-<div class="span-7 prepend-7" id="end_score">
+<div class="row">
+<div class="span6" id="end_score">
 
 <% if @score_sheet.size < 10 %>
 <% form_for @round_end, :url => {:controller => "round", :action => "update"} do |f| %>
     <table>
         <thead>
             <%for i in (1..@round.arrow_count) do%>
-            <th>Shot <%= i%></th>
+            <th>Shot <%= i %></th>
             <% end%>
             <th>X's</th>
         </thead>
         <tbody>
         <tr>
             <% for arrow in Range.new(1,@round.arrow_count)%>
-            <td><%= select("shot", arrow.to_s, @possible_scores, {:selected => @last_score})%></td>
+            <td><%= select("shot", arrow.to_s, @possible_scores, {:selected => @last_score}, :class=>"span2")%></td>
             <% end %>
-            <td><%= select("shot", "x", Array.new(@round.arrow_count+1){|i| i})%></td>
+            <td><%= select("shot", "x", Array.new(@round.arrow_count+1){|i| i}, :class => "span2")%></td>
             <%= f.hidden_field :round_id%>
-            <td><%= f.submit "OK", :remote => true%>
+            <td><%= f.submit "OK", :remote => true, :class=>"span2"%>
         </tr>
         </tbody>
     </table>
@@ -35,8 +35,9 @@ function BounceEffect(element){
 <%= link_to "Results", :action => "results", :id => @round.id%>
 <% end %>
 </div>
+</div>
 <div class="clear"></div>
-<div class="span-7 prepend-7 last">
+<div class="span7">
 <%= render "score_sheet"%>
 </div>
 

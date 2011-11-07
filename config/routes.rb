@@ -71,6 +71,7 @@ AbrS::Application.routes.draw do
   match 'administration/show_leagues' => 'administration#show_leagues'
   match 'administration/toggle_admin' => 'administration#toggle_admin'
   match 'administration/delete_shooter' => 'administration#delete_shooter'
+  match 'administration/delete_league' => 'administration#delete_league'
   match 'tournament/show' => 'tournament#show'  
   match 'tournament/:id/show' => 'tournament#show'
   match 'tournament/index'

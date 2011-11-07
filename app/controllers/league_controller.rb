@@ -5,6 +5,9 @@ class LeagueController < ApplicationController
     redirect_to :controller => "league", :action => "show"
   end
   
+  def delete
+  end
+  
   def show
     @shooter = current_user
     if params[:id].nil?

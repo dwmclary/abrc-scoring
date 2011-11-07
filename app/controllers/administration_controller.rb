@@ -64,4 +64,10 @@ class AdministrationController < ApplicationController
     redirect_to :action => "show_users"
   end
   
+  def delete_league
+    league = League.find(params[:id])
+    league.destroy
+    redirect_to :action => "show_leagues"
+  end
+  
 end
