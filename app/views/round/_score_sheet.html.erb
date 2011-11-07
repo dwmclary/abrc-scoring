@@ -14,7 +14,7 @@
     <thead>
         <tr>
         <th>End</th>
-        <% for s in Array.new(@score_sheet.first.arrow_count){|i| 1+i} %>
+        <% for s in Array.new(@round.arrow_count){|i| 1+i} %>
             <th> Arrow <%= s %> </th>
         <% end %>
             <th> End Total </th>
